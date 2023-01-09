@@ -1,3 +1,13 @@
+:root {
+  --header-height: 150px;
+  --navbar-height: 150px;
+  --footer-height: 150px;
+}
+
+* {
+  box-sizing: border-box
+}
+
 .app {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -11,6 +21,7 @@
 
 
 .header {
+  background: linear-gradient(to right, white,grey,white);
   position: sticky;
   top: 0;
   grid-area: header;
@@ -19,8 +30,11 @@
   flex-direction: row;
   border: 1px solid black;
   border-radius: 15px;
+  align-items: center;
 }
+
 .navbar {
+  background: linear-gradient(to right, white,grey,white);
   position: sticky;
   top: var(--header-height);
   grid-area: navbar;
@@ -30,10 +44,70 @@
   flex-wrap: no-wrap;
   border: 1px solid black;
   border-radius: 15px;
+  align-items: center;
   
 }
 .footer {
   grid-area: footer;
   border: 1px solid black;
   border-radius: 15px;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
+
+.main{
+  grid-area: main;
+  border: 1px solid black;
+  border-radius: 15px;
+}
+
+.login-box {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.login-box__form--input {
+  display: block;
+}
+
+.login-box__form--button {
+  display: block;
+}
+
+.login-box__form--label {
+  display: block;
+}
+
+.reviews {
+  text-align: center;
+}
+
+.reviews__list {
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: row;
+  justify-content: space-around;
+  
+}
+
+.reviews__list__element--container {
+  list-style-type: none;
+  width: 250px;
+}
+
+.reviews__list__element--review-id {
+  font-size: 2rem
+}
+.reviews__list__element--review-id--box {
+  border: 1px solid lightgrey;
+  box-shadow: 2px 2px 2px 1px rgba(0, 0, 0, 0.2)
+}
+.reviews__header {
+  position: sticky;
+  top: calc(var(--footer-height) + var(--navbar-height));
+  background-color: white;
+  box-shadow: 0 10px 10px 10px white; 
 }

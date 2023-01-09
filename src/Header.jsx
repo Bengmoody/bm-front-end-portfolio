@@ -1,17 +1,18 @@
+import { Link } from "react-router-dom";
 function Header() {
     return (
         <div className="header">
             <div className="title-box">
-                <h1>BM Portfolio Website</h1>
+                <Link to="/" style={{textDecoration: "none"}}><h1>BM Portfolio Website</h1></Link>
             </div>
             {/* Following form is currently non-working, just a placeholder */}
             <div className="login-box">
                 <form className="login-box__form">
-                    <label for="login-box__form--input" className="login-box__form--input">
+                    <label htmlFor="login-box__form--input" className="login-box__form--label">
                         Enter your username below to login:
-                        <input type="text" id="login-box__form--input"></input>
+                        <input type="text" id="login-box__form--input" className="login-box__form--input"></input>
                     </label>
-                    <button type="button">Login</button>
+                    <button type="button" className="login-box__form--button">Login</button>
 
                 </form>
             </div>
