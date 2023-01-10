@@ -110,12 +110,16 @@
   flex-wrap: wrap;
   flex-direction: row;
   justify-content: space-around;
+  padding: 0px;
   
 }
 
 .reviews__list__element--container {
   list-style-type: none;
   width: 250px;
+  padding: 10px;
+  border: 1px solid lightgrey;
+  border-radius: 15px;
 }
 
 .reviews__list__element--review-id {
@@ -183,44 +187,29 @@
   animation-iteration-count: infinite;
   animation-name: animate-loading-rocket;
 }
-.rocket-launch {
-  animation-duration: 0.5s;
-  animation-name: animate-launching-rocket;
-}
 
 @keyframes animate-loading-rocket {
   0% {
     transform: scale(1) rotate(10deg)
   }
   25% {
-    transform: scale(1.25) rotate(-15deg)
+
+    transform: scale(1.25) rotate(90deg)
   }
   33% {
-    transform: scale(0.80) rotate(20deg)
+    transform: scale(0.80) rotate(110deg)
   }
   50% {
-    transform: scale(1.1) rotate(-10deg)
+    transform: scale(1.1) rotate(180deg)
   }
   66% {
-    transform: scale(1.25) rotate(5deg)
+    transform: scale(1.25) rotate(210deg)
   }
   75% {
-    transform: scale(0.90) rotate(-5deg)
+    transform: scale(0.90) rotate(270deg)
   }
   100% {
-    transform: scale(1) rotate(0deg)
-  }
-}
-
-@keyframes animate-launching-rocket {
-  0% {
-    transform: scale(1) rotate(0deg);
-  }
-  50% {
-    transform: scale(2) translate3D(50vw,-50vh,0) rotate(0);
-  }
-  100% {
-    transform: scale(3) translate3D(100vw,-100vh,0) rotate(0deg);
+    transform: scale(1) rotate(360deg)
   }
 }
 

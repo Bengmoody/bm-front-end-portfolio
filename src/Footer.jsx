@@ -1,8 +1,8 @@
 function Footer() {
     return (
-        <div className="footer">
+        <footer className="footer">
             Copyright Benjamin Moody, 2023
-        </div>
+        </footer>
     )
 
 }

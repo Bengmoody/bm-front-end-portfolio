@@ -10,7 +10,6 @@ function SingleReview() {
     const {review_id} = useParams();
     const [isLoading, setIsLoading] = useState(false)
     const [showComments,setShowComments] = useState(false)
-    const [finishedLoading, setFinishedLoading] = useState(false)
     const onClickHandler = (e) => {
         setShowComments(!showComments)
     }
@@ -18,36 +17,25 @@ function SingleReview() {
 
     useEffect(() => {
         setIsLoading(true)
-        setFinishedLoading(false)
         getSingleReview(review_id).then((review) => {
             setSingleReview(review)
-            setFinishedLoading(true)
-            const animation = document.querySelector('.rocket')
-            animation.addEventListener('animationend', () => {
-                setIsLoading(false)
-            })
-
-            animation.removeEventListener('animationend', () => {
-                setIsLoading(false)
-            })
-
-
+            setIsLoading(false)
         })
         return () => {
         }
     }, [])
     return isLoading ?
-        (<div className="loading-container">
+        (<section className="loading-container">
         <p className="loading-message">Loading...</p>
-        <p className={!finishedLoading ? "rocket loading-rocket" : "rocket rocket-launch"}>
+        <p className="rocket loading-rocket">
             <br />
-            🚀
+            ⌛
         </p>
-        </div>)
+        </section>)
         :
 
     (
-        <div className={showComments ? "single-review single-review-with-comments" : "single-review"}>
+        <section className={showComments ? "single-review single-review-with-comments" : "single-review"}>
             <ul className="single-review__list">
                 <li className="single-review__list__element--container">
                     <p className="single-review__list__element--key">Review ID:</p> 
@@ -96,7 +84,7 @@ function SingleReview() {
                 </li>
             </ul>
             <Comments showComments={showComments} review_id={review_id} setSingleReview={setSingleReview}/>
-        </div>
+        </section>
     )
 }
 
