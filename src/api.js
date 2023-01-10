@@ -10,6 +10,11 @@ export const getReviews = () => {
         return res.data
     })
 }
+export const getSingleReview = (review_id) => {
+    return myApi.get(`/reviews/${review_id}`).then((res) => {
+        return res.data.review
+    })
+}
 
 export const formatDate = (dateString) => {
   const options = { year: "numeric", month: "long", day: "numeric" }
