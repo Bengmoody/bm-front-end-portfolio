@@ -1,44 +1,33 @@
 import { useEffect, useState } from 'react'
 import { getReviews } from './api'
 import { Link } from 'react-router-dom'
-import { formatDate } from './api'
+import { formatDate } from './utils'
 
 function Reviews() {
     const [reviewList, setReviewList] = useState([])
     const [isLoading, setIsLoading] = useState(false)
 
-    const [finishedLoading, setFinishedLoading] = useState(false)
     useEffect(() => {
         setIsLoading(true)
-        setFinishedLoading(false)
+        
         getReviews().then(({ reviews }) => {
             setReviewList(reviews)
-            setFinishedLoading(true)
-            const animation = document.querySelector('.rocket')
-            animation.addEventListener('animationend', () => {
-                setIsLoading(false)
-            })
-
-            animation.removeEventListener('animationend', () => {
-                setIsLoading(false)
-            })
-
-
+            setIsLoading(false)
         })
         return () => {
         }
     }, [])
     return isLoading ?
-        (<div className="loading-container">
+        (<section className="loading-container">
         <p className="loading-message">Loading...</p>
-        <p className={!finishedLoading ? "rocket loading-rocket" : "rocket rocket-launch"}>
+        <p className="rocket loading-rocket">
             <br />
-            🚀
+            ⌛
         </p>
-        </div>)
+        </section>)
         :
         (
-            <div className="reviews">
+            <section className="reviews">
                 <div className="reviews__header"><h2>Reviews</h2>
                     <p>Please click a review_id to view more details for that review:</p>
                 </div>
@@ -56,7 +45,7 @@ function Reviews() {
                     })}
                 </ul>
 
-            </div>
+            </section>
         )
 
 }

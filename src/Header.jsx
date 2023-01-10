@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 function Header() {
     return (
-        <div className="header">
+        <header className="header">
             <div className="title-box">
                 <Link to="/" style={{textDecoration: "none"}}><h1>BM Portfolio Website</h1></Link>
             </div>
@@ -16,7 +16,7 @@ function Header() {
 
                 </form>
             </div>
-        </div>
+        </header>
     )
 
 }

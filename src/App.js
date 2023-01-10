@@ -11,13 +11,13 @@ function App() {
     <div className="app">
       <Header />
       <Navbar />
-      <div className="main">
+      <main className="main">
         <Routes>
           <Route path="/reviews" element={<Reviews />}></Route>
           <Route path="/reviews/:review_id" element={<SingleReview />}></Route>
           <Route path="/" element={<Welcome />}></Route>
         </Routes>
-      </div>
+      </main>
       <Footer />
     </div>
   );
