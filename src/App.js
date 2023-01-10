@@ -4,6 +4,7 @@ import Navbar from './Navbar';
 import Footer from './Footer';
 import Reviews from './Reviews';
 import Welcome from './Welcome';
+import SingleReview from './SingleReview';
 
 function App() {
   return (
@@ -13,6 +14,7 @@ function App() {
       <div className="main">
         <Routes>
           <Route path="/reviews" element={<Reviews />}></Route>
+          <Route path="/reviews/:review_id" element={<SingleReview />}></Route>
           <Route path="/" element={<Welcome />}></Route>
         </Routes>
       </div>
