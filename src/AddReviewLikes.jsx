@@ -25,14 +25,14 @@ function AddReviewLikes({likes,setSingleReview,review_id}) {
 
     }
     return (
-        <div className="add-review-likes">
-            <div className="add-review-likes__container">
+        <section className="add-review-likes">
+            <section className="add-review-likes__container">
                 <button type="button" onClick={handleOnClick} id="up"><div className="add-review-likes__button">👍</div></button>
                 <p>{likes}</p>
                 <button type="button" onClick={handleOnClick} id="down"><div className="add-review-likes__button">👎</div></button>
-            </div>
+            </section>
 
-        </div>
+        </section>
 
     )
 
