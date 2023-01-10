@@ -1,10 +1,11 @@
 :root {
-  --navbar-height: 150px; 
   --header-height: 150px;
+  --navbar-height: 150px;
   --footer-height: 150px;
 }
-* { 
-  box-sizing: border-box;
+
+* {
+  box-sizing: border-box
 }
 
 .app {
@@ -20,6 +21,7 @@
 
 
 .header {
+  background: linear-gradient(to right, white,grey,white);
   position: sticky;
   top: 0;
   grid-area: header;
@@ -28,15 +30,142 @@
   flex-direction: row;
   border: 1px solid black;
   border-radius: 15px;
+  align-items: center;
 }
+
 .navbar {
+  background: linear-gradient(to right, white,grey,white);
   position: sticky;
   top: var(--header-height);
   grid-area: navbar;
+  display: flex;
+  justify-content: space-around;
+  flex-direction: row;
+  flex-wrap: no-wrap;
+  border: 1px solid black;
+  border-radius: 15px;
+  align-items: center;
+  
 }
 .footer {
   grid-area: footer;
+  border: 1px solid black;
+  border-radius: 15px;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
+
+.main{
+  grid-area: main;
+  border: 1px solid black;
+  border-radius: 15px;
+}
+
+.login-box {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.login-box__form--input {
+  display: block;
+}
+
+.login-box__form--button {
+  display: block;
+}
+
+.login-box__form--label {
+  display: block;
+}
+
+.reviews {
+  text-align: center;
 }
 
 
 
+
+.reviews__list {
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: row;
+  justify-content: space-around;
+  
+}
+
+.reviews__list__element--container {
+  list-style-type: none;
+  width: 250px;
+}
+
+.reviews__list__element--review-id {
+  font-size: 2rem
+}
+.reviews__list__element--review-id--box {
+  border: 1px solid lightgrey;
+  box-shadow: 2px 2px 2px 1px rgba(0, 0, 0, 0.2)
+}
+.reviews__header {
+  position: sticky;
+  top: calc(var(--footer-height) + var(--navbar-height));
+  background-color: white;
+  box-shadow: 0 10px 10px 10px white; 
+}
+
+.rocket {
+  font-size: 5rem;
+  text-align: center;
+}
+.loading-rocket {
+  animation-duration: 0.5s;
+  animation-iteration-count: infinite;
+  animation-name: animate-loading-rocket;
+}
+.rocket-launch {
+  animation-duration: 0.5s;
+  animation-name: animate-launching-rocket;
+}
+
+@keyframes animate-loading-rocket {
+  0% {
+    transform: scale(1) rotate(10deg)
+  }
+  25% {
+    transform: scale(1.25) rotate(-15deg)
+  }
+  33% {
+    transform: scale(0.80) rotate(20deg)
+  }
+  50% {
+    transform: scale(1.1) rotate(-10deg)
+  }
+  66% {
+    transform: scale(1.25) rotate(5deg)
+  }
+  75% {
+    transform: scale(0.90) rotate(-5deg)
+  }
+  100% {
+    transform: scale(1) rotate(0deg)
+  }
+}
+
+@keyframes animate-launching-rocket {
+  0% {
+    transform: scale(1) rotate(0deg);
+  }
+  50% {
+    transform: scale(2) translate3D(50vw,-50vh,0) rotate(0);
+  }
+  100% {
+    transform: scale(3) translate3D(100vw,-100vh,0) rotate(0deg);
+  }
+}
+
+.loading-container {
+  text-align: center;
+  font-size: 3rem;
+}
