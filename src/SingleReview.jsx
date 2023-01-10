@@ -66,8 +66,8 @@ function SingleReview() {
                 </li>
                 <li className="single-review__list__element--container">
                     <p className="single-review__list__element--key">Number of upvotes:</p> 
-                    <p className="single-review__list__element--value">{singleReview.votes}<br/></p>
-                    <AddReviewLikes />
+                    {/* <p className="single-review__list__element--value">{singleReview.votes}<br/></p> */}
+                    <AddReviewLikes review_id={review_id} likes={singleReview.votes} setSingleReview={setSingleReview}/>
                 </li>
                 <li className="single-review__list__element--container">
                     <p className="single-review__list__element--key">Number of user comments on review:</p> 

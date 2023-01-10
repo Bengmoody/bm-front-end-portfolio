@@ -26,6 +26,16 @@ export const getSingleReviewComments = (review_id) => {
     })
 }
 
+export const patchSingleReview = (review_id,increment) => {
+    let patchBody={"inc_votes":increment}
+    return myApi.patch(`/reviews/${review_id}`,patchBody)
+    .then((res) => {
+        if (res.status !== 202) {
+            return Promise.reject();
+        }
+    })
+}
+
 export const getUsers = (username) => {
     return myApi.get(`/users/${username}`)
     .then((res) => {
