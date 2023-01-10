@@ -5,11 +5,13 @@ import Footer from './Footer';
 import Reviews from './Reviews';
 import Welcome from './Welcome';
 import SingleReview from './SingleReview';
+import {useState} from 'react'
 
 function App() {
+  const [loggedUser,setLoggedUser] = useState("")
   return (
     <div className="app">
-      <Header />
+      <Header loggedUser={loggedUser} setLoggedUser={setLoggedUser} />
       <Navbar />
       <main className="main">
         <Routes>

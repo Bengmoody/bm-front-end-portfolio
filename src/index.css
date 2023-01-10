@@ -79,15 +79,18 @@
   border-radius: 15px;
 }
 
-.login-box {
+.login-box__form {
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  padding: 10px;
+  text-align: center;
 }
 
 .login-box__form--input {
   display: block;
+  width: 120px;
 }
 
 .login-box__form--button {
@@ -95,7 +98,11 @@
 }
 
 .login-box__form--label {
-  display: block;
+  display: flex;
+  flex-direction: column;
+  flex-wrap: nowrap;
+  align-items: center;
+  text-align: center;
 }
 
 .reviews {
