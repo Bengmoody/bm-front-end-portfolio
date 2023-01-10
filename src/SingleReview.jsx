@@ -7,14 +7,42 @@ import AddReviewLikes from './AddReviewLikes'
 function SingleReview() {
     const [singleReview,setSingleReview] = useState({})
     const {review_id} = useParams();
-    useEffect(() => {
-        getSingleReview(review_id)
-        .then((review) => {
-            setSingleReview(review)
-        })
-    },[])
+    
 
-    return (
+    const [isLoading, setIsLoading] = useState(false)
+
+    const [finishedLoading, setFinishedLoading] = useState(false)
+    useEffect(() => {
+        setIsLoading(true)
+        setFinishedLoading(false)
+        getSingleReview(review_id).then((review) => {
+            setSingleReview(review)
+            setFinishedLoading(true)
+            const animation = document.querySelector('.rocket')
+            animation.addEventListener('animationend', () => {
+                setIsLoading(false)
+            })
+
+            animation.removeEventListener('animationend', () => {
+                setIsLoading(false)
+            })
+
+
+        })
+        return () => {
+        }
+    }, [])
+    return isLoading ?
+        (<div className="loading-container">
+        <p className="loading-message">Loading...</p>
+        <p className={!finishedLoading ? "rocket loading-rocket" : "rocket rocket-launch"}>
+            <br />
+            🚀
+        </p>
+        </div>)
+        :
+
+    (
         <div className="single-review">
             <ul className="single-review__list">
                 <li className="single-review__list__element--container">

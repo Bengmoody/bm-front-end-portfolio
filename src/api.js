@@ -11,7 +11,6 @@ export const getReviews = () => {
     })
 }
 export const getSingleReview = (review_id) => {
-    console.log(`/reviews/${review_id}`)
     return myApi.get(`/reviews/${review_id}`).then((res) => {
         return res.data.review
     })
