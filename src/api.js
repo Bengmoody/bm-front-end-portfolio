@@ -18,11 +18,20 @@ export const getSingleReview = (review_id) => {
 
 export const getSingleReviewComments = (review_id) => {
     return myApi.get(`/reviews/${review_id}/comments`).then((res) => {
-        console.log(res)
         if (res.data.comments === undefined) {
             return Promise.reject();
         } else {
            return res.data.comments 
+        }
+    })
+}
+
+export const patchSingleReview = (review_id,increment) => {
+    let patchBody={"inc_votes":increment}
+    return myApi.patch(`/reviews/${review_id}`,patchBody)
+    .then((res) => {
+        if (res.status !== 202) {
+            return Promise.reject();
         }
     })
 }
