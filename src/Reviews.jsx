@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { getReviews } from './api'
 import { Link } from 'react-router-dom'
-import { formatDate } from './api'
+import { formatDate } from './utils'
 
 function Reviews() {
     const [reviewList, setReviewList] = useState([])

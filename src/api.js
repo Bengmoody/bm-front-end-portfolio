@@ -16,7 +16,12 @@ export const getSingleReview = (review_id) => {
     })
 }
 
-export const formatDate = (dateString) => {
-  const options = { year: "numeric", month: "long", day: "numeric" }
-  return new Date(dateString).toLocaleDateString(undefined, options)
+export const getSingleReviewComments = (review_id) => {
+    return myApi.get(`/reviews/${review_id}/comments`).then((res) => {
+        if (res.data.comments === undefined) {
+            return Promise.reject();
+        } else {
+           return res.data.comments 
+        }
+    })
 }
