@@ -3,7 +3,7 @@ import { getSingleReviewComments } from './api';
 import { formatDate } from './utils';
 import AddCommentLikes from './AddCommentLikes';
 
-function Comments({showComments,review_id,setSingleReview}) {
+function Comments({showComments,review_id,setSingleReview,singleReview}) {
     const [commentList,setCommentList] = useState([])
     const [isError,setIsError] = useState(false)
     useEffect(() => {
@@ -16,11 +16,20 @@ function Comments({showComments,review_id,setSingleReview}) {
             setIsError(true)
         })
     },[])
-    return ( isError? (
+
+    if (singleReview.comment_count === "0") {
+        return (
+        <div className={showComments ? "comments":"hide-comments"} >
+            <p>There are no comments for this review.</p>
+        </div>
+        )
+    } else if (isError) {
+        return ( 
         <div className={showComments ? "comments":"hide-comments"} >
             <p>Unable to load comments...</p>
-        </div>
-    ) : (
+        </div>)
+    } else {
+        return (
         <div className={showComments ? "comments":"hide-comments"} >
             <ul className="comment-list">
                 {commentList.map((comment) => {
@@ -43,8 +52,9 @@ function Comments({showComments,review_id,setSingleReview}) {
             </ul>
 
         </div>
-    )
-    )
+        )
+        }
+    
 
 }
 

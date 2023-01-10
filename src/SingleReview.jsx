@@ -21,8 +21,7 @@ function SingleReview() {
             setSingleReview(review)
             setIsLoading(false)
         })
-        return () => {
-        }
+        
     }, [])
     return isLoading ?
         (<section className="loading-container">
@@ -83,7 +82,7 @@ function SingleReview() {
                     <img src={`${singleReview.review_img_url}`} className="single-review__list__element--img" alt={`image of review titled ${singleReview.title}`}/><br/>
                 </li>
             </ul>
-            <Comments showComments={showComments} review_id={review_id} setSingleReview={setSingleReview}/>
+            <Comments showComments={showComments} review_id={review_id} setSingleReview={setSingleReview} singleReview={singleReview}/>
         </section>
     )
 }
