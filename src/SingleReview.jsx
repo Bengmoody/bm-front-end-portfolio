@@ -5,7 +5,7 @@ import { formatDate } from './utils.js'
 import AddReviewLikes from './AddReviewLikes'
 import Comments from './Comments'
 
-function SingleReview() {
+function SingleReview({loggedUser}) {
     const [singleReview,setSingleReview] = useState({})
     const {review_id} = useParams();
     const [isLoading, setIsLoading] = useState(false)
@@ -82,7 +82,7 @@ function SingleReview() {
                     <img src={`${singleReview.review_img_url}`} className="single-review__list__element--img" alt={`image of review titled ${singleReview.title}`}/><br/>
                 </li>
             </ul>
-            <Comments showComments={showComments} review_id={review_id} setSingleReview={setSingleReview} singleReview={singleReview}/>
+            <Comments loggedUser={loggedUser} showComments={showComments} review_id={review_id} setSingleReview={setSingleReview} singleReview={singleReview}/>
         </section>
     )
 }

@@ -16,7 +16,7 @@ function App() {
       <main className="main">
         <Routes>
           <Route path="/reviews" element={<Reviews />}></Route>
-          <Route path="/reviews/:review_id" element={<SingleReview />}></Route>
+          <Route path="/reviews/:review_id" element={<SingleReview loggedUser={loggedUser}/>}></Route>
           <Route path="/" element={<Welcome />}></Route>
         </Routes>
       </main>

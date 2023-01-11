@@ -351,3 +351,28 @@
   height: 20px;
 }
 
+.hide-comment-form {
+  display: none;
+}
+
+.comment-form__input {
+  width: 200px;
+  height: 75px;
+  margin: 10px;
+  display: block;
+  border: 1px solid lightgrey;
+  border-radius: 15px;
+  box-shadow: 0px 0px 5px 1px lightgrey ;
+  text-align: center;
+
+}
+.comment-form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.comment-posting {
+  box-shadow: 0 0 3px 3px blue inset;
+  
+}
