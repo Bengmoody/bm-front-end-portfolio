@@ -1,14 +1,18 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useRef } from 'react'
 import { getSingleReviewComments } from './api';
 import { formatDate } from './utils';
 import AddCommentLikes from './AddCommentLikes';
 import { postComment } from './api';
+import { gsap } from 'gsap';
 
 function Comments({ loggedUser, showComments, review_id, setSingleReview, singleReview }) {
     const [commentList, setCommentList] = useState([])
     const [inputComment, setInputComment] = useState("")
-    const [isError, setIsError] = useState(false)
     const commentQueue = [];
+    const myRef = useRef()
+    const [isError, setIsError] = useState(false)
+    const [inputClass, setInputClass] = useState("comment-form__input")
+    const [warningMessage,setWarningMessage] = useState(" ")
     useEffect(() => {
         getSingleReviewComments(review_id)
             .then((comments) => {
@@ -19,25 +23,44 @@ function Comments({ loggedUser, showComments, review_id, setSingleReview, single
                 setIsError(true)
             })
     }, [])
+   
+    useEffect(() => {
+        if (inputClass !== "comment-form__input") {
+            gsap.from(myRef.current,{
+                duration: 1,
+                autoAlpha: 0,
+                ease: "none",
+                delay: 0
+            })
+
+        }
+
+    },[inputClass])
 
     const handleOnSubmit = (e) => {
         e.preventDefault()
+        if (e.target.value === undefined) {
+            setInputClass("comment-form__input shake-input")
+            setWarningMessage("Please enter a valid comment.")
+        }
         if (inputComment !== "") {
+            setInputClass("comment-form__input")
+            setWarningMessage(" ")
             setCommentList((currList) => {
-                let newCommentId = `posting_${(Math.random()*10000).toString()}`
-                const placeholderComment={
+                let newCommentId = `posting_${(Math.random() * 10000).toString()}`
+                const placeholderComment = {
                     "comment_id": newCommentId,
-                    "body":inputComment,
-                    "votes":0,
-                    "author":loggedUser,
-                    "review_id":review_id,
+                    "body": inputComment,
+                    "votes": 0,
+                    "author": loggedUser,
+                    "review_id": review_id,
                     "created_at": "Just now..."
                 }
                 commentQueue.unshift(placeholderComment)
                 const newList = [placeholderComment, ...currList]
                 setSingleReview((currReview) => {
-                    let newReview = {...currReview}
-                    newReview.comment_count = +newReview.comment_count+1;
+                    let newReview = { ...currReview }
+                    newReview.comment_count = +newReview.comment_count + 1;
                     return newReview
                 })
                 return newList
@@ -45,13 +68,13 @@ function Comments({ loggedUser, showComments, review_id, setSingleReview, single
             postComment(loggedUser, review_id, inputComment)
                 .then((returnedComment) => {
                     setCommentList((currList) => {
-                        let pendingComment=commentQueue.pop();
+                        let pendingComment = commentQueue.pop();
                         let newList = [...currList]
                         newList = newList.map((currComment) => {
-                            let test=true;
+                            let test = true;
                             for (let x in currComment) {
                                 if (currComment[x] !== pendingComment[x]) {
-                                    test=false;
+                                    test = false;
                                 }
                             }
                             if (test) {
@@ -65,13 +88,13 @@ function Comments({ loggedUser, showComments, review_id, setSingleReview, single
                 })
                 .catch((err) => {
                     setCommentList((currList) => {
-                        let pendingComment=commentQueue.pop();
+                        let pendingComment = commentQueue.pop();
                         let newList = [...currList]
                         const index = newList.findIndex((currComment) => {
-                            let test=true;
+                            let test = true;
                             for (let x in currComment) {
                                 if (currComment[x] !== pendingComment[x]) {
-                                    test=false;
+                                    test = false;
                                 }
                             }
                             if (test) {
@@ -81,11 +104,11 @@ function Comments({ loggedUser, showComments, review_id, setSingleReview, single
                             }
                         })
                         setSingleReview((currReview) => {
-                            let newReview = {...currReview}
-                            newReview.comment_count = +newReview.comment_count-1;
+                            let newReview = { ...currReview }
+                            newReview.comment_count = +newReview.comment_count - 1;
                             return newReview
                         })
-                        newList.splice(index,1)
+                        newList.splice(index, 1)
                         return newList
                     })
                 })
@@ -101,7 +124,10 @@ function Comments({ loggedUser, showComments, review_id, setSingleReview, single
             <div className={showComments ? "comments" : "hide-comments"} >
                 <p>There are no comments for this review.</p>
                 <form onSubmit={handleOnSubmit} className={loggedUser === "" ? "hide-comment-form" : "comment-form"}>
-                    <input className="comment-form__input" type="text" placeholder="Add your comment here..." value={inputComment} onChange={handleOnChange}></input>
+                    <input className={inputClass} type="text" placeholder="Add your comment here..." value={inputComment} onChange={handleOnChange}></input>
+                    <p ref={myRef} className="comment-form__message">{warningMessage}</p>
+                    <p className={inputClass === "comment-form__input" ? "show-filler" : "hide-filler"}></p>
+                    <div className="form-overlay"></div>
                     <button className="comment-form__button">Add</button>
                 </form>
             </div>
@@ -115,8 +141,10 @@ function Comments({ loggedUser, showComments, review_id, setSingleReview, single
         return (
             <div className={showComments ? "comments" : "hide-comments"} >
                 <form onSubmit={handleOnSubmit} className={loggedUser === "" ? "hide-comment-form" : "comment-form"}>
-                    <input className="comment-form__input" type="text" placeholder="Add your comment here..." value={inputComment} onChange={handleOnChange}></input>
-                    <button className="comment-form__button">Add</button>
+                    <input className={inputClass} type="text" placeholder="Add your comment here..." value={inputComment} onChange={handleOnChange}></input>
+                    <p ref={myRef} className="comment-form__message">{warningMessage}</p>
+                    <div className="form-overlay"><p className={"form-overlay__text"}>Posting...</p></div>
+                    <button className={"comment-form__button"}>Add</button>
                 </form>
                 <ul className="comment-list">
                     {commentList.map((comment) => {
