@@ -5,8 +5,13 @@ const myApi = axios.create({
     baseURL: "https://bmoody-portfolio.onrender.com/api"
 })
 
-export const getReviews = () => {
-    return myApi.get('/reviews').then((res) => {
+export const getReviews = (category) => {
+    let url = `/reviews`
+    if (category) {
+        url += `?category=${category}&`
+    }
+    return myApi.get(url).then((res) => {
+        console.log(res)
         return res.data
     })
 }
@@ -35,3 +40,12 @@ export const patchSingleReview = (review_id,increment) => {
         }
     })
 }
+
+
+export const getCategories = () => {
+    return myApi.get('/categories')
+    .then((res) => {
+        return res.data.categories;
+    })
+}
+

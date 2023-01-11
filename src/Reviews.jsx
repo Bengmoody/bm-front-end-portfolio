@@ -2,15 +2,25 @@ import { useEffect, useState } from 'react'
 import { getReviews } from './api'
 import { Link } from 'react-router-dom'
 import { formatDate } from './utils'
+import {useSearchParams} from 'react-router-dom'
 
 function Reviews() {
     const [reviewList, setReviewList] = useState([])
     const [isLoading, setIsLoading] = useState(false)
-
+    const [searchParams,setSearchParams] = useSearchParams()
+    const [displayCategory,setDisplayCategory] = useState("")
+    const category = searchParams.get('category')
+    
     useEffect(() => {
         setIsLoading(true)
-        
-        getReviews().then(({ reviews }) => {
+        setDisplayCategory(() => {
+            if (category) {
+                return category.split("-").join(" ").toUpperCase()
+            } else {
+                return "";
+            }
+        })
+        getReviews(category).then(({ reviews }) => {
             setReviewList(reviews)
             setIsLoading(false)
         })
@@ -29,6 +39,7 @@ function Reviews() {
         (
             <section className="reviews">
                 <div className="reviews__header"><h2>Reviews</h2>
+                    <p className={displayCategory !== "" ? "category-present" : "hide-category-present"}>These reviews are for category: {displayCategory}</p>
                     <p>Please click a review_id to view more details for that review:</p>
                 </div>
                 <ul className="reviews__list">

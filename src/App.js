@@ -5,6 +5,7 @@ import Footer from './Footer';
 import Reviews from './Reviews';
 import Welcome from './Welcome';
 import SingleReview from './SingleReview';
+import Categories from './Categories';
 
 function App() {
   return (
@@ -16,6 +17,7 @@ function App() {
           <Route path="/reviews" element={<Reviews />}></Route>
           <Route path="/reviews/:review_id" element={<SingleReview />}></Route>
           <Route path="/" element={<Welcome />}></Route>
+          <Route path="/categories" element={<Categories />}></Route>
         </Routes>
       </main>
       <Footer />
