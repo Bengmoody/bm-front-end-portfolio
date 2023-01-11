@@ -9,7 +9,6 @@ function Comments({ loggedUser, showComments, review_id, setSingleReview, single
     const [inputComment, setInputComment] = useState("")
     const [isError, setIsError] = useState(false)
     const commentQueue = [];
-    const [isPosting, setIsPosting] = useState(false)
     useEffect(() => {
         getSingleReviewComments(review_id)
             .then((comments) => {
@@ -24,7 +23,6 @@ function Comments({ loggedUser, showComments, review_id, setSingleReview, single
     const handleOnSubmit = (e) => {
         e.preventDefault()
         if (inputComment !== "") {
-            setIsPosting(true)
             setCommentList((currList) => {
                 let newCommentId = `posting_${(Math.random()*10000).toString()}`
                 const placeholderComment={
