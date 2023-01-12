@@ -20,17 +20,17 @@ function Comments({ loggedUser, showComments, review_id, setSingleReview, single
     const [inputClass, setInputClass] = useState("comment-form__input")
     const [warningMessage, setWarningMessage] = useState(" ")
     const [targetComment,setTargetComment] = useState("")
-    const [targetClass,setTargetClass] = useState("")
+    const [targetClass,setTargetClass] = useState("comment-list__element--container")
 
     useEffect(() => {
         if (isDeleting) {
             setTargetClass("comment-list__element--container comment-deleting")
         } else if (isDeleted) {
-            setTargetClass("comment-list__element--container comment-deleting")
+            setTargetClass("comment-list__element--container comment-fading")
         } else if (deleteFailed) {
-
+            setTargetClass("comment-list__element--container shake-comment")
         } else {
-            return "comment-list__element--container"
+            setTargetClass("comment-list__element--container")
         }
 
     },[isDeleting,isDeleted,deleteFailed])
@@ -82,6 +82,11 @@ function Comments({ loggedUser, showComments, review_id, setSingleReview, single
                 setIsDeleted(true)
 
                 setTimeout(() => {
+                    setSingleReview((currRev) => {
+                        let newRev = {...currRev}
+                        newRev.comment_count = (+newRev.comment_count - 1).toString()
+                        return newRev
+                    })
                     setCommentList((currList) => {
                         const newList = [...currList]
                         let editedList = newList.filter((comment) => {
@@ -96,6 +101,9 @@ function Comments({ loggedUser, showComments, review_id, setSingleReview, single
             .catch((err) => {
                 setIsDeleting(false)
                 setDeleteFailed(true)
+                setTimeout(()=> {
+                    setDeleteFailed(false)
+                },1000)
             })
     }
     const handleOnSubmit = (e) => {
@@ -213,11 +221,10 @@ function Comments({ loggedUser, showComments, review_id, setSingleReview, single
                         let startOfCommentId = ((comment.comment_id).toString().split("_")[0])
                         if (comment.author === loggedUser) {
                             return (
-                                <li key={Math.random() * 10000} className={startOfCommentId === "posting" ? "comment-list__element--container comment-posting" : ((targetComment === comment.comment_id)? {targetClass} : "comment-list__element--container")}> 
-                                {/* (isDeleting ? "comment-list__element--container comment-deleting" : (isDeleted? "comment-list__element--container comment-fading":"comment-list__element--container"))}> */}
+                                <li key={Math.random() * 10000} className={startOfCommentId === "posting" ? "comment-list__element--container comment-posting" : ((targetComment === comment.comment_id)? targetClass : "comment-list__element--container")}> 
                                     <div className="comment-list__element--author--container">
                                         <p className="comment__list__element--author">{comment.author}</p>
-                                        <button onClick={deleteHandler} id={comment.comment_id} className={isDeleting ? "hide" : "comment__list__element--delete-button"} type="button">🗑️</button>
+                                        <button onClick={deleteHandler} id={comment.comment_id} className={ (isDeleting && comment.comment_id === targetComment) ? "hide" : ((isDeleted && comment.comment_id === targetComment) ? "hide" : "comment__list__element--delete-button")} type="button">🗑️</button>
                                     </div>
                                     <div className="comment-list__element--body--container">
                                         <p className="comment__list__element--body">{comment.body}<br /></p>
