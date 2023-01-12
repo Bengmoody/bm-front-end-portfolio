@@ -9,7 +9,9 @@ function Comments({ loggedUser, showComments, review_id, setSingleReview, single
     const [commentList, setCommentList] = useState([])
     const [inputComment, setInputComment] = useState("")
     const commentQueue = [];
-    const myRef = useRef()
+    const errorMessageRef = useRef()
+    const overlayRef = useRef()
+    const [isLoading, setIsLoading] = useState(false)
     const [isError, setIsError] = useState(false)
     const [inputClass, setInputClass] = useState("comment-form__input")
     const [warningMessage,setWarningMessage] = useState(" ")
@@ -26,7 +28,7 @@ function Comments({ loggedUser, showComments, review_id, setSingleReview, single
    
     useEffect(() => {
         if (inputClass !== "comment-form__input") {
-            gsap.from(myRef.current,{
+            gsap.from(errorMessageRef.current,{
                 duration: 1,
                 autoAlpha: 0,
                 ease: "none",
@@ -36,6 +38,18 @@ function Comments({ loggedUser, showComments, review_id, setSingleReview, single
         }
 
     },[inputClass])
+    useEffect(() => {
+        if (isLoading === true) {
+            gsap.from(overlayRef.current,{
+                duration: 1,
+                autoAlpha: 0,
+                ease: "none",
+                delay: 0
+            })
+
+        }
+
+    },[isLoading])
 
     const handleOnSubmit = (e) => {
         e.preventDefault()
@@ -44,6 +58,7 @@ function Comments({ loggedUser, showComments, review_id, setSingleReview, single
             setWarningMessage("Please enter a valid comment.")
         }
         if (inputComment !== "") {
+            setIsLoading(true)
             setInputClass("comment-form__input")
             setWarningMessage(" ")
             setCommentList((currList) => {
@@ -67,6 +82,7 @@ function Comments({ loggedUser, showComments, review_id, setSingleReview, single
             })
             postComment(loggedUser, review_id, inputComment)
                 .then((returnedComment) => {
+                    setIsLoading(false)
                     setCommentList((currList) => {
                         let pendingComment = commentQueue.pop();
                         let newList = [...currList]
@@ -125,9 +141,8 @@ function Comments({ loggedUser, showComments, review_id, setSingleReview, single
                 <p>There are no comments for this review.</p>
                 <form onSubmit={handleOnSubmit} className={loggedUser === "" ? "hide-comment-form" : "comment-form"}>
                     <input className={inputClass} type="text" placeholder="Add your comment here..." value={inputComment} onChange={handleOnChange}></input>
-                    <p ref={myRef} className="comment-form__message">{warningMessage}</p>
-                    <p className={inputClass === "comment-form__input" ? "show-filler" : "hide-filler"}></p>
-                    <div className="form-overlay"></div>
+                    <p ref={errorMessageRef} className="comment-form__message">{warningMessage}</p>
+                    <div ref={overlayRef} className={isLoading ? "form-overlay" : "hide"}><p className="form-overlay__text">Posting...</p></div>
                     <button className="comment-form__button">Add</button>
                 </form>
             </div>
@@ -142,8 +157,8 @@ function Comments({ loggedUser, showComments, review_id, setSingleReview, single
             <div className={showComments ? "comments" : "hide-comments"} >
                 <form onSubmit={handleOnSubmit} className={loggedUser === "" ? "hide-comment-form" : "comment-form"}>
                     <input className={inputClass} type="text" placeholder="Add your comment here..." value={inputComment} onChange={handleOnChange}></input>
-                    <p ref={myRef} className="comment-form__message">{warningMessage}</p>
-                    <div className="form-overlay"><p className={"form-overlay__text"}>Posting...</p></div>
+                    <p ref={errorMessageRef} className="comment-form__message">{warningMessage}</p>
+                    <div ref={overlayRef} className={isLoading ? "form-overlay" : "hide"}><p className={"form-overlay__text"}>Posting...</p></div>
                     <button className={"comment-form__button"}>Add</button>
                 </form>
                 <ul className="comment-list">
