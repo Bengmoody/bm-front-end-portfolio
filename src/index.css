@@ -356,6 +356,7 @@
   height: 20px;
 }
 
+
 .hide-comment-form {
   display: none;
 }
@@ -443,3 +444,49 @@ position: relative;
 .hide {
   display: none;
 }
+
+.categories-list__list__element--container {
+  list-style-type: none;
+  padding: 10px;
+  border: 1px solid black;
+  border-radius: 15px;
+  margin: 10px;
+  box-shadow: 0px 0px 5px 5px grey;
+  width: 320px;
+}
+@media all and (max-width: 360px) {
+  .categories-list__list__element--container {
+    list-style-type: none;
+    padding: 10px;
+    border: 1px solid black;
+    border-radius: 15px;
+    margin: 10px;
+    box-shadow: 0px 0px 5px 5px grey;
+    width: 270px;
+  }
+}
+
+.categories-list__list {
+  display: flex;
+  flex-direction: column;
+  flex-wrap: nowrap;
+  align-items: center;
+  justify-content: center;
+  padding: 0px;
+  margin: 10px;
+}
+
+.categories-list__description {
+  text-align: center;
+  padding: 10px;
+}
+
+.hide-category-present {
+  display: none;
+}
+
+.category-present {
+  font-weight: bold;
+  color: green;
+}
+
