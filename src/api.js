@@ -6,11 +6,11 @@ const myApi = axios.create({
 })
 
 export const getReviews = (category) => {
-    let url = `/reviews`
-    if (category) {
-        url += `?category=${category}&`
+    let params = {
+        category
     }
-    return myApi.get(url).then((res) => {
+    let url = `/reviews`
+    return myApi.get(url,{params}).then((res) => {
         return res.data
     })
 }
