@@ -40,6 +40,31 @@ export const patchSingleReview = (review_id,increment) => {
     })
 }
 
+export const getUsers = (username) => {
+    return myApi.get(`/users/${username}`)
+    .then((res) => {
+        if (res.status !== 200) {
+            return Promise.reject();
+        } else {
+            return res;
+        }
+    })
+}
+
+export const postComment = (username,review_id,comment) => {
+    const postBody = {
+        "body": comment,
+        "username": username
+    }
+    return myApi.post(`reviews/${review_id}/comments`,postBody)
+    .then((res) => {
+        if (res.status !== 201) {
+            return Promise.reject()
+        } else {
+            return res.data.comment
+        }
+    })
+}
 
 export const getCategories = () => {
     return myApi.get('/categories')
