@@ -20,6 +20,21 @@ function Comments({ loggedUser, showComments, review_id, setSingleReview, single
     const [inputClass, setInputClass] = useState("comment-form__input")
     const [warningMessage, setWarningMessage] = useState(" ")
     const [targetComment,setTargetComment] = useState("")
+    const [targetClass,setTargetClass] = useState("")
+
+    useEffect(() => {
+        if (isDeleting) {
+            setTargetClass("comment-list__element--container comment-deleting")
+        } else if (isDeleted) {
+            setTargetClass("comment-list__element--container comment-deleting")
+        } else if (deleteFailed) {
+
+        } else {
+            return "comment-list__element--container"
+        }
+
+    },[isDeleting,isDeleted,deleteFailed])
+
     useEffect(() => {
         getSingleReviewComments(review_id)
             .then((comments) => {
@@ -57,9 +72,8 @@ function Comments({ loggedUser, showComments, review_id, setSingleReview, single
     }, [isLoading])
 
     const deleteHandler = (e) => {
+        setTargetComment(+e.target.id)
         setIsDeleting(true)
-        // console.log(e.target.id)
-        setTargetComment(e.target.id)
 
 
         deleteCommentById(e.target.id)
@@ -199,7 +213,8 @@ function Comments({ loggedUser, showComments, review_id, setSingleReview, single
                         let startOfCommentId = ((comment.comment_id).toString().split("_")[0])
                         if (comment.author === loggedUser) {
                             return (
-                                <li key={Math.random() * 10000} className={startOfCommentId === "posting" ? "comment-list__element--container comment-posting" : (isDeleting ? "comment-list__element--container comment-deleting" : (isDeleted? "comment-list__element--container comment-fading":"comment-list__element--container"))}>
+                                <li key={Math.random() * 10000} className={startOfCommentId === "posting" ? "comment-list__element--container comment-posting" : ((targetComment === comment.comment_id)? {targetClass} : "comment-list__element--container")}> 
+                                {/* (isDeleting ? "comment-list__element--container comment-deleting" : (isDeleted? "comment-list__element--container comment-fading":"comment-list__element--container"))}> */}
                                     <div className="comment-list__element--author--container">
                                         <p className="comment__list__element--author">{comment.author}</p>
                                         <button onClick={deleteHandler} id={comment.comment_id} className={isDeleting ? "hide" : "comment__list__element--delete-button"} type="button">🗑️</button>
