@@ -11,7 +11,6 @@ export const getReviews = (category) => {
         url += `?category=${category}&`
     }
     return myApi.get(url).then((res) => {
-        console.log(res)
         return res.data
     })
 }
