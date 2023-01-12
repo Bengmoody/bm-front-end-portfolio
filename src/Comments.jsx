@@ -4,6 +4,7 @@ import { formatDate } from './utils';
 import AddCommentLikes from './AddCommentLikes';
 import { postComment } from './api';
 import { gsap } from 'gsap';
+import { deleteCommentById } from './api';
 
 function Comments({ loggedUser, showComments, review_id, setSingleReview, singleReview }) {
     const [commentList, setCommentList] = useState([])
@@ -12,9 +13,13 @@ function Comments({ loggedUser, showComments, review_id, setSingleReview, single
     const errorMessageRef = useRef()
     const overlayRef = useRef()
     const [isLoading, setIsLoading] = useState(false)
+    const [isDeleted, setIsDeleted] = useState(false)
+    const [deleteFailed, setDeleteFailed] = useState(false)
+    const [isDeleting, setIsDeleting] = useState(false)
     const [isError, setIsError] = useState(false)
     const [inputClass, setInputClass] = useState("comment-form__input")
-    const [warningMessage,setWarningMessage] = useState(" ")
+    const [warningMessage, setWarningMessage] = useState(" ")
+    const [targetComment,setTargetComment] = useState("")
     useEffect(() => {
         getSingleReviewComments(review_id)
             .then((comments) => {
@@ -25,10 +30,10 @@ function Comments({ loggedUser, showComments, review_id, setSingleReview, single
                 setIsError(true)
             })
     }, [])
-   
+
     useEffect(() => {
         if (inputClass !== "comment-form__input") {
-            gsap.from(errorMessageRef.current,{
+            gsap.from(errorMessageRef.current, {
                 duration: 1,
                 autoAlpha: 0,
                 ease: "none",
@@ -37,10 +42,10 @@ function Comments({ loggedUser, showComments, review_id, setSingleReview, single
 
         }
 
-    },[inputClass])
+    }, [inputClass])
     useEffect(() => {
         if (isLoading === true) {
-            gsap.from(overlayRef.current,{
+            gsap.from(overlayRef.current, {
                 duration: 1,
                 autoAlpha: 0,
                 ease: "none",
@@ -49,8 +54,36 @@ function Comments({ loggedUser, showComments, review_id, setSingleReview, single
 
         }
 
-    },[isLoading])
+    }, [isLoading])
 
+    const deleteHandler = (e) => {
+        setIsDeleting(true)
+        // console.log(e.target.id)
+        setTargetComment(e.target.id)
+
+
+        deleteCommentById(e.target.id)
+            .then((res) => {
+                setIsDeleting(false)
+                setIsDeleted(true)
+
+                setTimeout(() => {
+                    setCommentList((currList) => {
+                        const newList = [...currList]
+                        let editedList = newList.filter((comment) => {
+                            return comment.comment_id !== +e.target.id;
+                        })
+                        return editedList
+                    })
+                    setIsDeleted(false)
+                }
+                    , 1000)
+            })
+            .catch((err) => {
+                setIsDeleting(false)
+                setDeleteFailed(true)
+            })
+    }
     const handleOnSubmit = (e) => {
         e.preventDefault()
         if (e.target.value === undefined) {
@@ -164,20 +197,42 @@ function Comments({ loggedUser, showComments, review_id, setSingleReview, single
                 <ul className="comment-list">
                     {commentList.map((comment) => {
                         let startOfCommentId = ((comment.comment_id).toString().split("_")[0])
-                        return (
-                            <li key={Math.random() * 10000} className={startOfCommentId === "posting" ? "comment-list__element--container comment-posting" : "comment-list__element--container"}>
-                                <div className="comment-list__element--author--container">
-                                    <p className="comment__list__element--author">{comment.author}</p>
-                                </div>
-                                <div className="comment-list__element--body--container">
-                                    <p className="comment__list__element--body">{comment.body}<br /></p>
-                                </div>
-                                <div className="comment-list__element--footer--container">
-                                    <p className="comment__list__element--footer--date">{comment.created_at === "Just now..." ? "Just now..." : formatDate(comment.created_at)}<br /></p>
-                                    <AddCommentLikes likes={comment.votes} setCommentList={setCommentList} />
-                                </div>
-                            </li>
-                        )
+                        if (comment.author === loggedUser) {
+                            return (
+                                <li key={Math.random() * 10000} className={startOfCommentId === "posting" ? "comment-list__element--container comment-posting" : (isDeleting ? "comment-list__element--container comment-deleting" : (isDeleted? "comment-list__element--container comment-fading":"comment-list__element--container"))}>
+                                    <div className="comment-list__element--author--container">
+                                        <p className="comment__list__element--author">{comment.author}</p>
+                                        <button onClick={deleteHandler} id={comment.comment_id} className={isDeleting ? "hide" : "comment__list__element--delete-button"} type="button">🗑️</button>
+                                    </div>
+                                    <div className="comment-list__element--body--container">
+                                        <p className="comment__list__element--body">{comment.body}<br /></p>
+                                    </div>
+                                    <div className="comment-list__element--footer--container">
+                                        <p className="comment__list__element--footer--date">{comment.created_at === "Just now..." ? "Just now..." : formatDate(comment.created_at)}<br /></p>
+                                        <AddCommentLikes likes={comment.votes} setCommentList={setCommentList} />
+                                    </div>
+                                </li>
+                            )
+                        } else {
+                            return (
+                                <li key={Math.random() * 10000} className={startOfCommentId === "posting" ? "comment-list__element--container comment-posting" : "comment-list__element--container"}>
+                                    <div className="comment-list__element--author--container">
+                                        <p className="comment__list__element--author">{comment.author}</p>
+                                    </div>
+                                    <div className="comment-list__element--body--container">
+                                        <p className="comment__list__element--body">{comment.body}<br /></p>
+                                    </div>
+                                    <div className="comment-list__element--footer--container">
+                                        <p className="comment__list__element--footer--date">{comment.created_at === "Just now..." ? "Just now..." : formatDate(comment.created_at)}<br /></p>
+                                        <AddCommentLikes likes={comment.votes} setCommentList={setCommentList} />
+                                    </div>
+                                </li>
+                            )
+
+
+
+
+                        }
                     })}
 
                 </ul>

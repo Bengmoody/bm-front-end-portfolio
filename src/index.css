@@ -321,7 +321,9 @@
 .comment-list__element--author--container {
   text-align: left;
   display: flex;
-  justify-content: left;
+  justify-content: space-between;
+  flex-wrap: nowrap;
+  flex-direction: row;
   align-items: center;
   height: 30px;
   padding: 10px;
@@ -490,3 +492,36 @@ position: relative;
   color: green;
 }
 
+.comment__list__element--delete-button {
+  border-radius: 10px;
+  cursor: pointer;
+  font-size: 0.75rem;
+}
+
+.comment-deleting {
+  box-shadow: 0 0 3px 3px orange inset;
+  
+}
+
+.comment-fading {
+  animation-name: deleteFade;
+  animation-duration: 1s;
+}
+
+@keyframes deleteFade {
+  0% {
+    opacity: 1;
+  }
+  25% {
+    opacity: 0.75;
+  }
+  50% {
+    opacity: 0.5;
+  }
+  75% {
+    opacity: 0.25;
+  }
+  100% {
+    opacity: 0;
+  }
+}

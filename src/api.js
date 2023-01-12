@@ -73,3 +73,13 @@ export const getCategories = () => {
     })
 }
 
+export const deleteCommentById = (comment_id) => {
+    return myApi.delete(`/comments/${comment_id}`)
+    .then((res) => {
+        if (res.status === 204) {
+            return true;
+        } else {
+            return Promise.reject()
+        }
+    })
+}
