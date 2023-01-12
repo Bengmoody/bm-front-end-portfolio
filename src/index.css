@@ -146,6 +146,7 @@
   top: calc(var(--footer-height) + var(--navbar-height));
   background-color: white;
   box-shadow: 0px 10px 10px 10px white; 
+  margin: 10px;
 }
 
 .single-review__list {
@@ -490,3 +491,37 @@ position: relative;
   color: green;
 }
 
+.reviews__header__query-form__list--message--content {
+  font-weight: bold;
+  font-style: italic;
+  color: orange;
+}
+
+.reviews__header__query {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 50px auto 50px;
+  grid-template-areas: 
+  "title title"
+  "sort order"
+  "message message";
+  border: 1px solid lightgrey;
+  border-radius: 15px;
+  margin: 10px;
+}
+
+.sort {
+  grid-area: sort;
+}
+
+.order {
+  grid-area: order;
+}
+
+.reviews__header__query-form--title {
+  grid-area: title;
+}
+
+.reviews__header__query-form__list--message {
+  grid-area: message;
+}
