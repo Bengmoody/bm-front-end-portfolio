@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom'
 import { formatDate } from './utils'
 import {useSearchParams} from 'react-router-dom'
 
-function Reviews() {
+function Reviews({clickListener}) {
     const [reviewList, setReviewList] = useState([])
     const [isLoading, setIsLoading] = useState(false)
     const [searchParams,setSearchParams] = useSearchParams()
@@ -24,9 +24,8 @@ function Reviews() {
             setReviewList(reviews)
             setIsLoading(false)
         })
-        return () => {
-        }
-    }, [])
+        
+    }, [clickListener])
     return isLoading ?
         (<section className="loading-container">
         <p className="loading-message">Loading...</p>
