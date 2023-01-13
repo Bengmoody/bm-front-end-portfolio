@@ -83,13 +83,13 @@ function Comments({ loggedUser, showComments, review_id, setSingleReview, single
 
                 setTimeout(() => {
                     setSingleReview((currRev) => {
-                        let newRev = {...currRev}
+                        const newRev = {...currRev}
                         newRev.comment_count = (+newRev.comment_count - 1).toString()
                         return newRev
                     })
                     setCommentList((currList) => {
                         const newList = [...currList]
-                        let editedList = newList.filter((comment) => {
+                        const editedList = newList.filter((comment) => {
                             return comment.comment_id !== +e.target.id;
                         })
                         return editedList
@@ -116,8 +116,13 @@ function Comments({ loggedUser, showComments, review_id, setSingleReview, single
             setIsLoading(true)
             setInputClass("comment-form__input")
             setWarningMessage(" ")
+            setSingleReview((currReview) => {
+                const newReview = { ...currReview }
+                newReview.comment_count = +newReview.comment_count + 1;
+                return newReview
+            })
             setCommentList((currList) => {
-                let newCommentId = `posting_${(Math.random() * 10000).toString()}`
+                const newCommentId = `posting_${(Math.random() * 10000).toString()}`
                 const placeholderComment = {
                     "comment_id": newCommentId,
                     "body": inputComment,
@@ -128,18 +133,14 @@ function Comments({ loggedUser, showComments, review_id, setSingleReview, single
                 }
                 commentQueue.unshift(placeholderComment)
                 const newList = [placeholderComment, ...currList]
-                setSingleReview((currReview) => {
-                    let newReview = { ...currReview }
-                    newReview.comment_count = +newReview.comment_count + 1;
-                    return newReview
-                })
+                
                 return newList
             })
             postComment(loggedUser, review_id, inputComment)
                 .then((returnedComment) => {
                     setIsLoading(false)
                     setCommentList((currList) => {
-                        let pendingComment = commentQueue.pop();
+                        const pendingComment = commentQueue.pop();
                         let newList = [...currList]
                         newList = newList.map((currComment) => {
                             let test = true;
@@ -158,9 +159,12 @@ function Comments({ loggedUser, showComments, review_id, setSingleReview, single
                     })
                 })
                 .catch((err) => {
+                    setIsLoading(false)
+                    setWarningMessage("Unable to post comment.")
+
                     setCommentList((currList) => {
-                        let pendingComment = commentQueue.pop();
-                        let newList = [...currList]
+                        const pendingComment = commentQueue.pop();
+                        const newList = [...currList]
                         const index = newList.findIndex((currComment) => {
                             let test = true;
                             for (let x in currComment) {
@@ -174,13 +178,14 @@ function Comments({ loggedUser, showComments, review_id, setSingleReview, single
                                 return false
                             }
                         })
-                        setSingleReview((currReview) => {
-                            let newReview = { ...currReview }
-                            newReview.comment_count = +newReview.comment_count - 1;
-                            return newReview
-                        })
+                        
                         newList.splice(index, 1)
                         return newList
+                    })
+                    setSingleReview((currReview) => {
+                        const newReview = { ...currReview }
+                        newReview.comment_count = +newReview.comment_count - 1;
+                        return newReview
                     })
                 })
         }
@@ -200,6 +205,9 @@ function Comments({ loggedUser, showComments, review_id, setSingleReview, single
                     <div ref={overlayRef} className={isLoading ? "form-overlay" : "hide"}><p className="form-overlay__text">Posting...</p></div>
                     <button className="comment-form__button">Add</button>
                 </form>
+                <p className={loggedUser === "" ? "login-to-comment-prompt" : "hide"} >
+                    Please login to add your own comment.
+                </p>
             </div>
         )
     } else if (isError) {
@@ -216,6 +224,9 @@ function Comments({ loggedUser, showComments, review_id, setSingleReview, single
                     <div ref={overlayRef} className={isLoading ? "form-overlay" : "hide"}><p className={"form-overlay__text"}>Posting...</p></div>
                     <button className={"comment-form__button"}>Add</button>
                 </form>
+                <p className={loggedUser === "" ? "login-to-comment-prompt" : "hide"} >
+                    Please login to add your own comment.
+                </p>
                 <ul className="comment-list">
                     {commentList.map((comment) => {
                         let startOfCommentId = ((comment.comment_id).toString().split("_")[0])
