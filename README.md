@@ -1,70 +1,133 @@
-# Getting Started with Create React App
+# Ben Moody Portfolio Website
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+## Overview
 
-## Available Scripts
+This website is an example of the work of Ben Moody.
 
-In the project directory, you can run:
+This particular hosted website is a front end built using HTML, CSS, JSX and React.
+View the hosted version at:
+[hosted front-end](https://bmoody-portfolio.netlify.app/).
 
-### `npm start`
+This front end was designed to display the information accessible via a separately hosted back-end API, also built by Ben Moody.
+This is available to view at:
+[hosted back-end](https://bmoody-portfolio.onrender.com/api/).
+The back-end repo is available on github 
+[here](https://github.com/Bengmoody/bm-back-portfolio).
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+The web-app makes CRUD queries to the back-end api utilising Axios.
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+Consideration has been given to the user experience, with the app including features such as:
 
-### `npm test`
+- design responsive to viewport width, with consideration for common mobile screen sizes (done with media queries in CSS).
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+- use of animations and conditional rendering to improve the UX, for instance by:
+    - hiding or blocking page components in response to user interaction.
+    - utilising colour changes and animations to guide user attention.
 
-### `npm run build`
+- useful user feedback and prompts given, e.g.
+    - prompt to login in order to post comments
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+- optimistic rendering with asynchronous corrections, where appropriate.
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+- error handling implemented to handle server errors and also user interference with URL path.
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+## Download and installation
+To download this repo please run the following command:
 
-### `npm run eject`
+`git clone https://github.com/Bengmoody/bm-front-end-portfolio.git`
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+Once you have done this, cd into the directory with the command:
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+`cd bm-front-end-portfolio`
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+Once inside, please install all dependencies with the command:
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+`npm install`
 
-## Learn More
+Current non-core dependencies include:
+- [axios](https://axios-http.com/docs/intro): ^1.2.2
+- [framer-motion](https://www.framer.com/motion/): ^8.4.0
+- [gsap](https://greensock.com/docs/v3/GSAP): ^3.11.4
+- [react-transition-group](https://reactcommunity.org/react-transition-group/): ^4.4.5
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+Current core dependencies include:
+- testing-library/jest-dom: ^5.16.5
+- testing-library/react: ^13.4.0
+- testing-library/user-event: ^13.5.0
+- react: ^18.2.0
+- react-dom: ^18.2.0
+- react-router-dom: ^6.6.1
+- react-scripts: 5.0.1
+- web-vitals: ^2.1.4
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+This package was made using node v19.0.0, so please use a version no earlier than this.
 
-### Code Splitting
+## Currently available sections
+In the current build, sections are available as follows:
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+### 1. Header 
+Present on all pages.
+- Has a login box, which queries the API to check for valid username in database.  If not found, rejects entry and prompts to retry.  If successful, logs user in and holds this in state for use throughout the rest of the website.
+- Logo which redirects to landing page (/) on click.
 
-### Analyzing the Bundle Size
+### 2. Navbar
+Present on all pages.  Currently has the following links:
+- **Reviews**: queries API and displays data to show information about *all reviews*, i.e. removes any queries.
+- **Categories**: queries API and displays data to list all available queries.  
+- **Users**: currently a placeholder, links to /reviews/
+- **Add review**: currently a placeholder, links to /reviews/
+- **About**: currently a placeholder, links to /reviews/
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+### 3. Footer
+Present on all pages. 
+Contains minimal information around site ownership.
 
-### Making a Progressive Web App
+### 4. Main
+This is the main element of the website, and is rendered depending on interaction with the user. 
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+In the following section, any non-functional placeholder elements will be flagged with a footnote[^1].
 
-### Advanced Configuration
+- **Reviews**:
+    - Has a stick header component containing relevant prompts for UX.
+    - Has a query section available for searching.
+    - Has a list section, displaying sorted response tiles, as per user interaction.
+    - Clicking a tile displays a single review, with additional information and features:
+        - access to comments via a clickable button.
+        - comments section is responsive to viewport size.
+        - ability to upvote/downvote a review, which renders optimistically then patches the back-end, updating accordingly.
+        - if you are logged in as a user, you can add comments, and delete your own comments (try logging in as *grumpy19*, for e.g.). 
+        - ability to vote on comments is currently a placeholder[^1].
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
 
-### Deployment
+- **Categories**
+    - Has a list of clickable tiles which links to a queried list of reviews, for that specific category:
+        - This page has an updated header to contain category information.
+        - Again, sortable via query tile.
+        - Clicking a tile displays a single review, as above.
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
+- **Landing page**
+    - Contains a brief welcome message and a link to a list of back-end endpoints, rendered from the endpoints.json file on the back-end endpoint /api/.
+    This is currently a placeholder[^1].
 
-### `npm run build` fails to minify
+[^1]: Currently a non-functioning placeholder.
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+
+## Known bugs
+
+- Currently there is a bug in the back-end, such that a 500 response is given when retrieving comments associated with a review that has only 1 comment, e.g. review_id 8, 11 etc.
+
+
+## Planned updates
+
+1. Improve formatting of landing page (/) and footer.
+2. Change the logo from plain-text to a scalable SVG logo, and set limitations on scaling through media queries.
+3. Update landing page to be more attractive, including framer-motion animations upon site load.
+4. Add the ability to vote on comments.
+5. Improve website fonts.
+6. Add the ability to add a review.
+7. Add information on the back-end to "About", such that users can see all available endpoints.  
+8. Fixing back-end error 500.
+
+
+
+
