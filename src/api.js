@@ -13,12 +13,21 @@ export const getReviews = (category,sort_by,order) => {
     }
     let url = `/reviews`
     return myApi.get(url,{params}).then((res) => {
-        return res.data
+        if (res.status !== 200) {
+            return Promise.reject()
+        } else {
+            return res.data
+        }
+    }).catch((err) => {
+        return Promise.reject(err.response.status) 
     })
 }
 export const getSingleReview = (review_id) => {
     return myApi.get(`/reviews/${review_id}`).then((res) => {
         return res.data.review
+    })
+    .catch((err) => {
+        return Promise.reject(err.response.status)
     })
 }
 
@@ -71,7 +80,11 @@ export const postComment = (username,review_id,comment) => {
 export const getCategories = () => {
     return myApi.get('/categories')
     .then((res) => {
-        return res.data.categories;
+        if (res.status !== 200) {
+            return Promise.reject()
+        } else {
+            return res.data.categories;
+        }
     })
 }
 

@@ -5,6 +5,7 @@ import Footer from './Footer';
 import Reviews from './Reviews';
 import Welcome from './Welcome';
 import SingleReview from './SingleReview';
+import ErrorPage from './ErrorPage';
 
 
 import Categories from './Categories';
@@ -24,6 +25,7 @@ function App() {
          <Route path="/reviews/:review_id" element={<SingleReview loggedUser={loggedUser}/>}></Route>
           <Route path="/" element={<Welcome />}></Route>
           <Route path="/categories" element={<Categories />}></Route>
+          <Route path="*" element={<ErrorPage type="user"/>} />
         </Routes>
       </main>
       <Footer />
