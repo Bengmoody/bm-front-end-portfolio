@@ -22,8 +22,8 @@ function Categories() {
             <ul className="categories-list__list">
                 {categoryList.map((category) => {
                     return (
-                        <Link style={{textDecoration:"none",color: "black"}} to={`/reviews?category=${category.slug}`}>
-                            <li className="categories-list__list__element--container">
+                        <Link key={Math.random() * 10000} style={{textDecoration:"none",color: "black"}} to={`/reviews?category=${category.slug}`}>
+                            <li key={Math.random() * 10000} className="categories-list__list__element--container">
                                 <div className="categories-list__list__element--slug--container">
                                     <p className="categories-list__list__element--slug--body">
                                         {category.slug.split("-").join(" ").toUpperCase()}

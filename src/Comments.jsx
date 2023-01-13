@@ -4,6 +4,7 @@ import { formatDate } from './utils';
 import AddCommentLikes from './AddCommentLikes';
 import { postComment } from './api';
 import { gsap } from 'gsap';
+import { deleteCommentById } from './api';
 
 function Comments({ loggedUser, showComments, review_id, setSingleReview, singleReview }) {
     const [commentList, setCommentList] = useState([])
@@ -12,9 +13,28 @@ function Comments({ loggedUser, showComments, review_id, setSingleReview, single
     const errorMessageRef = useRef()
     const overlayRef = useRef()
     const [isLoading, setIsLoading] = useState(false)
+    const [isDeleted, setIsDeleted] = useState(false)
+    const [deleteFailed, setDeleteFailed] = useState(false)
+    const [isDeleting, setIsDeleting] = useState(false)
     const [isError, setIsError] = useState(false)
     const [inputClass, setInputClass] = useState("comment-form__input")
-    const [warningMessage,setWarningMessage] = useState(" ")
+    const [warningMessage, setWarningMessage] = useState(" ")
+    const [targetComment,setTargetComment] = useState("")
+    const [targetClass,setTargetClass] = useState("comment-list__element--container")
+
+    useEffect(() => {
+        if (isDeleting) {
+            setTargetClass("comment-list__element--container comment-deleting")
+        } else if (isDeleted) {
+            setTargetClass("comment-list__element--container comment-fading")
+        } else if (deleteFailed) {
+            setTargetClass("comment-list__element--container shake-comment")
+        } else {
+            setTargetClass("comment-list__element--container")
+        }
+
+    },[isDeleting,isDeleted,deleteFailed])
+
     useEffect(() => {
         getSingleReviewComments(review_id)
             .then((comments) => {
@@ -25,10 +45,10 @@ function Comments({ loggedUser, showComments, review_id, setSingleReview, single
                 setIsError(true)
             })
     }, [])
-   
+
     useEffect(() => {
         if (inputClass !== "comment-form__input") {
-            gsap.from(errorMessageRef.current,{
+            gsap.from(errorMessageRef.current, {
                 duration: 1,
                 autoAlpha: 0,
                 ease: "none",
@@ -37,10 +57,10 @@ function Comments({ loggedUser, showComments, review_id, setSingleReview, single
 
         }
 
-    },[inputClass])
+    }, [inputClass])
     useEffect(() => {
         if (isLoading === true) {
-            gsap.from(overlayRef.current,{
+            gsap.from(overlayRef.current, {
                 duration: 1,
                 autoAlpha: 0,
                 ease: "none",
@@ -49,8 +69,43 @@ function Comments({ loggedUser, showComments, review_id, setSingleReview, single
 
         }
 
-    },[isLoading])
+    }, [isLoading])
 
+    const deleteHandler = (e) => {
+        setTargetComment(+e.target.id)
+        setIsDeleting(true)
+
+
+        deleteCommentById(e.target.id)
+            .then((res) => {
+                setIsDeleting(false)
+                setIsDeleted(true)
+
+                setTimeout(() => {
+                    setSingleReview((currRev) => {
+                        const newRev = {...currRev}
+                        newRev.comment_count = (+newRev.comment_count - 1).toString()
+                        return newRev
+                    })
+                    setCommentList((currList) => {
+                        const newList = [...currList]
+                        const editedList = newList.filter((comment) => {
+                            return comment.comment_id !== +e.target.id;
+                        })
+                        return editedList
+                    })
+                    setIsDeleted(false)
+                }
+                    , 1000)
+            })
+            .catch((err) => {
+                setIsDeleting(false)
+                setDeleteFailed(true)
+                setTimeout(()=> {
+                    setDeleteFailed(false)
+                },1000)
+            })
+    }
     const handleOnSubmit = (e) => {
         e.preventDefault()
         if (e.target.value === undefined) {
@@ -61,8 +116,13 @@ function Comments({ loggedUser, showComments, review_id, setSingleReview, single
             setIsLoading(true)
             setInputClass("comment-form__input")
             setWarningMessage(" ")
+            setSingleReview((currReview) => {
+                const newReview = { ...currReview }
+                newReview.comment_count = +newReview.comment_count + 1;
+                return newReview
+            })
             setCommentList((currList) => {
-                let newCommentId = `posting_${(Math.random() * 10000).toString()}`
+                const newCommentId = `posting_${(Math.random() * 10000).toString()}`
                 const placeholderComment = {
                     "comment_id": newCommentId,
                     "body": inputComment,
@@ -73,18 +133,14 @@ function Comments({ loggedUser, showComments, review_id, setSingleReview, single
                 }
                 commentQueue.unshift(placeholderComment)
                 const newList = [placeholderComment, ...currList]
-                setSingleReview((currReview) => {
-                    let newReview = { ...currReview }
-                    newReview.comment_count = +newReview.comment_count + 1;
-                    return newReview
-                })
+                
                 return newList
             })
             postComment(loggedUser, review_id, inputComment)
                 .then((returnedComment) => {
                     setIsLoading(false)
                     setCommentList((currList) => {
-                        let pendingComment = commentQueue.pop();
+                        const pendingComment = commentQueue.pop();
                         let newList = [...currList]
                         newList = newList.map((currComment) => {
                             let test = true;
@@ -103,9 +159,12 @@ function Comments({ loggedUser, showComments, review_id, setSingleReview, single
                     })
                 })
                 .catch((err) => {
+                    setIsLoading(false)
+                    setWarningMessage("Unable to post comment.")
+
                     setCommentList((currList) => {
-                        let pendingComment = commentQueue.pop();
-                        let newList = [...currList]
+                        const pendingComment = commentQueue.pop();
+                        const newList = [...currList]
                         const index = newList.findIndex((currComment) => {
                             let test = true;
                             for (let x in currComment) {
@@ -119,13 +178,14 @@ function Comments({ loggedUser, showComments, review_id, setSingleReview, single
                                 return false
                             }
                         })
-                        setSingleReview((currReview) => {
-                            let newReview = { ...currReview }
-                            newReview.comment_count = +newReview.comment_count - 1;
-                            return newReview
-                        })
+                        
                         newList.splice(index, 1)
                         return newList
+                    })
+                    setSingleReview((currReview) => {
+                        const newReview = { ...currReview }
+                        newReview.comment_count = +newReview.comment_count - 1;
+                        return newReview
                     })
                 })
         }
@@ -145,6 +205,9 @@ function Comments({ loggedUser, showComments, review_id, setSingleReview, single
                     <div ref={overlayRef} className={isLoading ? "form-overlay" : "hide"}><p className="form-overlay__text">Posting...</p></div>
                     <button className="comment-form__button">Add</button>
                 </form>
+                <p className={loggedUser === "" ? "login-to-comment-prompt" : "hide"} >
+                    Please login to add your own comment.
+                </p>
             </div>
         )
     } else if (isError) {
@@ -161,23 +224,48 @@ function Comments({ loggedUser, showComments, review_id, setSingleReview, single
                     <div ref={overlayRef} className={isLoading ? "form-overlay" : "hide"}><p className={"form-overlay__text"}>Posting...</p></div>
                     <button className={"comment-form__button"}>Add</button>
                 </form>
+                <p className={loggedUser === "" ? "login-to-comment-prompt" : "hide"} >
+                    Please login to add your own comment.
+                </p>
                 <ul className="comment-list">
                     {commentList.map((comment) => {
                         let startOfCommentId = ((comment.comment_id).toString().split("_")[0])
-                        return (
-                            <li key={Math.random() * 10000} className={startOfCommentId === "posting" ? "comment-list__element--container comment-posting" : "comment-list__element--container"}>
-                                <div className="comment-list__element--author--container">
-                                    <p className="comment__list__element--author">{comment.author}</p>
-                                </div>
-                                <div className="comment-list__element--body--container">
-                                    <p className="comment__list__element--body">{comment.body}<br /></p>
-                                </div>
-                                <div className="comment-list__element--footer--container">
-                                    <p className="comment__list__element--footer--date">{comment.created_at === "Just now..." ? "Just now..." : formatDate(comment.created_at)}<br /></p>
-                                    <AddCommentLikes likes={comment.votes} setCommentList={setCommentList} />
-                                </div>
-                            </li>
-                        )
+                        if (comment.author === loggedUser) {
+                            return (
+                                <li key={Math.random() * 10000} className={startOfCommentId === "posting" ? "comment-list__element--container comment-posting" : ((targetComment === comment.comment_id)? targetClass : "comment-list__element--container")}> 
+                                    <div className="comment-list__element--author--container">
+                                        <p className="comment__list__element--author">{comment.author}</p>
+                                        <button onClick={deleteHandler} id={comment.comment_id} className={ (isDeleting && comment.comment_id === targetComment) ? "hide" : ((isDeleted && comment.comment_id === targetComment) ? "hide" : "comment__list__element--delete-button")} type="button">🗑️</button>
+                                    </div>
+                                    <div className="comment-list__element--body--container">
+                                        <p className="comment__list__element--body">{comment.body}<br /></p>
+                                    </div>
+                                    <div className="comment-list__element--footer--container">
+                                        <p className="comment__list__element--footer--date">{comment.created_at === "Just now..." ? "Just now..." : formatDate(comment.created_at)}<br /></p>
+                                        <AddCommentLikes likes={comment.votes} setCommentList={setCommentList} />
+                                    </div>
+                                </li>
+                            )
+                        } else {
+                            return (
+                                <li key={Math.random() * 10000} className={startOfCommentId === "posting" ? "comment-list__element--container comment-posting" : "comment-list__element--container"}>
+                                    <div className="comment-list__element--author--container">
+                                        <p className="comment__list__element--author">{comment.author}</p>
+                                    </div>
+                                    <div className="comment-list__element--body--container">
+                                        <p className="comment__list__element--body">{comment.body}<br /></p>
+                                    </div>
+                                    <div className="comment-list__element--footer--container">
+                                        <p className="comment__list__element--footer--date">{comment.created_at === "Just now..." ? "Just now..." : formatDate(comment.created_at)}<br /></p>
+                                        <AddCommentLikes likes={comment.votes} setCommentList={setCommentList} />
+                                    </div>
+                                </li>
+                            )
+
+
+
+
+                        }
                     })}
 
                 </ul>
