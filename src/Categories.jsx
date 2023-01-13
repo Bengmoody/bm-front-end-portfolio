@@ -17,6 +17,7 @@ function Categories() {
             })
     }, [])
 
+
     if (isError) {
         return (
             <ErrorPage code={isError} />
@@ -52,6 +53,7 @@ function Categories() {
             </section>
         )
     }
+
 }
 
 export default Categories;

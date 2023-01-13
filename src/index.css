@@ -322,7 +322,9 @@
 .comment-list__element--author--container {
   text-align: left;
   display: flex;
-  justify-content: left;
+  justify-content: space-between;
+  flex-wrap: nowrap;
+  flex-direction: row;
   align-items: center;
   height: 30px;
   padding: 10px;
@@ -491,6 +493,45 @@ position: relative;
   color: green;
 }
 
+.comment__list__element--delete-button {
+  border-radius: 10px;
+  cursor: pointer;
+  font-size: 0.75rem;
+}
+
+.comment-deleting {
+  box-shadow: 0 0 3px 3px orange inset;
+  
+}
+
+.comment-fading {
+  animation-name: deleteFade;
+  animation-duration: 1s;
+}
+
+@keyframes deleteFade {
+  0% {
+    opacity: 1;
+  }
+  25% {
+    opacity: 0.75;
+  }
+  50% {
+    opacity: 0.5;
+  }
+  75% {
+    opacity: 0.25;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+.shake-comment {
+  animation: shake-comment 1s cubic-bezier(0.36,0.07,0.19,0.97);
+  ;
+}
+
 .reviews__header__query-form__list--message--content {
   font-weight: bold;
   font-style: italic;
@@ -521,7 +562,22 @@ position: relative;
 .reviews__header__query-form--title {
   grid-area: title;
 }
-
+  
+@keyframes shake-comment {
+  10%,90% {
+    transform: translate3d(-1px,0,0);
+  }
+  20%,80% {
+    transform: translate3d(2px,0,0);
+  }
+  30%,50%,70% {
+    transform: translate3d(-4px,0,0);
+    box-shadow: 0px 0px 5px 1px red;
+  }
+  40%,60% {
+    transform: translate3d(4px,0,0);
+  }
+}
 .reviews__header__query-form__list--message {
   grid-area: message;
 }
