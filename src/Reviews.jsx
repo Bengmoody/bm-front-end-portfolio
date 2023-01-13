@@ -2,12 +2,14 @@ import { useEffect, useState } from 'react'
 import { getReviews } from './api'
 import { Link } from 'react-router-dom'
 import { formatDate } from './utils'
+import ErrorPage from './ErrorPage'
 
 import { useSearchParams } from 'react-router-dom'
 
 function Reviews({ clickListener }) {
     const [reviewList, setReviewList] = useState([])
     const [isLoading, setIsLoading] = useState(false)
+    const [isError, setIsError] = useState(0)
     const [searchParams, setSearchParams] = useSearchParams()
     const [displayParams, setDisplayParams] = useState({})
     const category = searchParams.get('category')
@@ -47,10 +49,21 @@ function Reviews({ clickListener }) {
         })
         getReviews(category, sort_by, order).then(({ reviews }) => {
             setReviewList(reviews)
+            setIsError(0)
+            setIsLoading(false)
+        })
+        .catch((code) => {
+            setIsError(code)
             setIsLoading(false)
         })
 
     }, [clickListener, searchParams])
+
+    if (isError !== 0) {
+        return (
+            <ErrorPage code={isError} />
+        )
+    }
     return isLoading ?
         (<section className="loading-container">
             <p className="loading-message">Loading...</p>

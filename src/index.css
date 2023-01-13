@@ -525,3 +525,20 @@ position: relative;
 .reviews__header__query-form__list--message {
   grid-area: message;
 }
+
+.error-handler__server {
+  border: 1px solid black;
+  border-radius: 15px;
+  font-size: 1.5rem;
+  background: radial-gradient(circle at 100%,red, white);
+  text-align: center;
+  padding: 50px;
+}
+.error-handler__user {
+  border: 1px solid black;
+  border-radius: 15px;
+  font-size: 1.5rem;
+  background: radial-gradient(circle at 100%,orange, white);
+  text-align: center;
+  padding: 50px;
+}
