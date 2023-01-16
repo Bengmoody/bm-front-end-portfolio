@@ -1,6 +1,34 @@
 import { useState } from 'react'
 import { Link } from "react-router-dom";
 import { getUsers } from './api';
+import { motion } from 'framer-motion';
+import { isVisible } from '@testing-library/user-event/dist/utils';
+
+const logoVariants = {
+    hidden: {
+      opacity: 0,
+      rotate: -45,
+      scale: 0.5
+    },
+    visible: {
+        opacity: 1,
+        rotate: 0,
+        scale: [1.2,1],
+        transition: {
+            duration: 1,
+        },
+        
+    },
+    hover:{
+        scale:1.2,
+    },
+    click: {scale: 0.9}
+
+    }
+    
+
+
+
 function Header({ loggedUser, setLoggedUser }) {
     const [userInput, setUserInput] = useState("")
     const [isInvalid, setIsInvalid] = useState(false)
@@ -38,9 +66,8 @@ function Header({ loggedUser, setLoggedUser }) {
         return (
             <header className="header">
                 <div className="title-box">
-                    <Link to="/" style={{ textDecoration: "none" }}><h1>BM Portfolio Website</h1></Link>
+                    <Link to="/" style={{ textDecoration: "none" }}><motion.img whileTap="click" variants={logoVariants} initial="hidden" whileHover="hover" animate="visible" src="untitled-2.svg" alt="website logo, BM Portfolio"/></Link>
                 </div>
-                {/* Following form is currently non-working, just a placeholder */}
                 <div className="login-box">
                     <section className="login-box__form">
 
@@ -55,9 +82,8 @@ function Header({ loggedUser, setLoggedUser }) {
         return (
             <header className="header">
                 <div className="title-box">
-                    <Link to="/" style={{ textDecoration: "none" }}><h1>BM Portfolio Website</h1></Link>
+                    <Link to="/" style={{ textDecoration: "none" }}><motion.img whileTap="click" variants={logoVariants} initial="hidden" whileHover="hover" animate="visible" src="untitled-2.svg" alt="website logo, BM Portfolio"/></Link>
                 </div>
-                {/* Following form is currently non-working, just a placeholder */}
                 <div className="login-box">
                     <section className="login-box__form">
 
@@ -72,9 +98,8 @@ function Header({ loggedUser, setLoggedUser }) {
         return (
             <header className="header">
                 <div className="title-box">
-                    <Link to="/" style={{ textDecoration: "none" }}><h1>BM Portfolio Website</h1></Link>
+                    <Link to="/" style={{ textDecoration: "none" }}><motion.img whileTap="click" variants={logoVariants} initial="hidden" whileHover="hover" animate="visible" src="untitled-2.svg" alt="website logo, BM Portfolio"/></Link>
                 </div>
-                {/* Following form is currently non-working, just a placeholder */}
                 <div className="login-box">
                     <form className="login-box__form" onSubmit={handleOnSubmit}>
                         <label htmlFor="login-box__form--input" className="login-box__form--label">

@@ -5,6 +5,41 @@ import { formatDate } from './utils.js'
 import AddReviewLikes from './AddReviewLikes'
 import Comments from './Comments'
 import ErrorPage from './ErrorPage'
+import { motion } from 'framer-motion'
+
+const pageVariants = {
+    initial: {
+        opacity: 0
+    },
+    animate: {
+        opacity: 1,
+        transition: {
+            delay: 0.5,
+            duration: 2
+        }
+    },
+    exit: {
+        opacity: 0,
+        transition: { duration: 1 }
+    }
+}
+const loaderVariants = {
+    initial: {
+        scale: 1,
+    },
+    animate: {
+        scale: [1,1.2,1,1.2],
+        backgroundColor: ["#0af", "rgba(50,230,50,1)", "rgba(230,230,255,1)", "#fa0"],
+        borderRadius: ["50px","25px","0px"],
+        transition: {
+            repeatType: "reverse",
+            repeat: Infinity,
+            duration: 1,
+            ease: "easeIn"
+        }
+    }
+
+}
 
 function SingleReview({ loggedUser }) {
     const [singleReview, setSingleReview] = useState({})
@@ -36,17 +71,25 @@ function SingleReview({ loggedUser }) {
         )
     } else {
         return isLoading ?
-            (<section className="loading-container">
+            (<motion.section
+                variants={pageVariants}
+                initial="initial"
+                animate="animate"
+                exit="exit"
+                className="loading-container">
                 <p className="loading-message">Loading...</p>
-                <p className="rocket loading-rocket">
-                    <br />
-                    ⌛
-                </p>
-            </section>)
+                <motion.div variants={loaderVariants} className="loader-ball" />
+
+            </motion.section>)
             :
 
             (
-                <section className={showComments ? "single-review single-review-with-comments" : "single-review"}>
+                <motion.section
+                    variants={pageVariants}
+                    initial="initial"
+                    animate="animate"
+                    exit="exit"
+                    className={showComments ? "single-review single-review-with-comments" : "single-review"}>
                     <ul className="single-review__list">
                         <li className="single-review__list__element--container">
                             <p className="single-review__list__element--key">Review ID:</p>
@@ -95,7 +138,7 @@ function SingleReview({ loggedUser }) {
                         </li>
                     </ul>
                     <Comments loggedUser={loggedUser} showComments={showComments} review_id={review_id} setSingleReview={setSingleReview} singleReview={singleReview} />
-                </section>
+                </motion.section>
             )
     }
 }
