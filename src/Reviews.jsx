@@ -3,8 +3,43 @@ import { getReviews } from './api'
 import { Link } from 'react-router-dom'
 import { formatDate } from './utils'
 import ErrorPage from './ErrorPage'
+import { motion } from 'framer-motion'
 
 import { useSearchParams } from 'react-router-dom'
+
+const pageVariants = {
+    initial: {
+        opacity: 0
+    },
+    animate: {
+        opacity: 1,
+        transition: {
+            delay: 0.5,
+            duration: 2
+        }
+    },
+    exit: {
+        opacity: 0,
+        transition: {duration: 1}
+    }
+}
+const loaderVariants = {
+    initial: {
+        scale: 1,
+    },
+    animate: {
+        scale: [1,1.2,1,1.2],
+        backgroundColor: ["#0af", "rgba(50,230,50,1)", "rgba(230,230,255,1)", "#fa0"],
+        borderRadius: ["50px","25px","0px"],
+        transition: {
+            repeatType: "reverse",
+            repeat: Infinity,
+            duration: 1,
+            ease: "easeIn"
+        }
+    }
+
+}
 
 function Reviews({ clickListener }) {
     const [reviewList, setReviewList] = useState([])
@@ -61,20 +96,17 @@ function Reviews({ clickListener }) {
 
     if (isError !== 0) {
         return (
-            <ErrorPage code={isError} />
+            <ErrorPage code={isError}/>
         )
     }
     return isLoading ?
-        (<section className="loading-container">
+        (<motion.section variants={pageVariants} initial="initial" animate="animate" exit="exit" className="loading-container">
             <p className="loading-message">Loading...</p>
-            <p className="rocket loading-rocket">
-                <br />
-                ⌛
-            </p>
-        </section>)
+            <motion.div variants={loaderVariants} className="loader-ball" />
+        </motion.section>)
         :
         (
-            <section className="reviews">
+            <motion.section variants={pageVariants} initial="initial" animate="animate" exit="exit" className="reviews">
                 <div className="reviews__header"><h2>Reviews</h2>
                     <p className={displayParams.category !== "" ? "category-present" : "hide-category-present"}>These reviews are for category: {displayParams.category}</p>
                     <p>Please click a review_id to view more details for that review:</p>
@@ -116,19 +148,39 @@ function Reviews({ clickListener }) {
                 </div>
                 <ul className="reviews__list">
                     {reviewList.map((review) => {
-                        return (<li className="reviews__list__element--container" key={Math.random() * 10000}>
-                            <Link style={{ textDecoration: "none" }} to={`/reviews/${review.review_id}`}><div className="reviews__list__element--review-id--box"><p className="reviews__list__element--review-id">{review.review_id}</p></div></Link>
+                        return (<motion.li 
+                        className="reviews__list__element--container" 
+                        whileHover={{
+                            boxShadow: "0px 0px 5px 5px aquamarine inset"
+                        }}
+                        key={Math.random() * 10000}>
+                            <Link style={{ textDecoration: "none", color: "black" }} to={`/reviews/${review.review_id}`}>
+                                <motion.div 
+                                    className="reviews__list__element--review-id--box"
+                                   
+                                    whileHover={{
+                                        scale: 1.1,
+                                        transition: {
+                                            duration: 0.3,
+                                            repeatType: 'reverse',
+                                            repeat: Infinity
+                                        },
+                                    }}
+                                >
+                                    <p className="reviews__list__element--review-id">{review.review_id}</p>
+                                </motion.div>
+                            </Link>
                             <p className="review__list__element--title">Review title: <br /><br />{review.title}</p>
                             <p className="review__list__element--created-at">{formatDate(review.created_at)}</p>
 
 
-                        </li>
+                        </motion.li>
                         )
 
                     })}
                 </ul>
 
-            </section>
+            </motion.section>
         )
 
 }
