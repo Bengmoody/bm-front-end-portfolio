@@ -137,7 +137,7 @@ function SingleReview({ loggedUser }) {
                             <img src={`${singleReview.review_img_url}`} className="single-review__list__element--img" alt={`image of review titled ${singleReview.title}`} /><br />
                         </li>
                     </ul>
-                    <Comments loggedUser={loggedUser} showComments={showComments} review_id={review_id} setSingleReview={setSingleReview} singleReview={singleReview} />
+                    <Comments transition={{layout:{duration: 2}}} loggedUser={loggedUser} showComments={showComments} review_id={review_id} setSingleReview={setSingleReview} singleReview={singleReview} />
                 </motion.section>
             )
     }
