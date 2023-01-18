@@ -160,6 +160,7 @@
   background-color: white;
   box-shadow: 0px 10px 10px 10px white; 
   margin: 10px;
+  font-size: 1rem;
 }
 
 .single-review__list {
@@ -241,7 +242,7 @@
 
 .loading-container {
   text-align: center;
-  font-size: 3rem;
+  font-size: 2rem;
   display: flex;
   justify-content: space-evenly;
   flex-wrap: nowrap;
@@ -568,6 +569,8 @@ position: relative;
   border: 1px solid lightgrey;
   border-radius: 15px;
   margin: 10px;
+  margin-bottom: 0;
+  padding-bottom: 10px;
 }
 
 .sort {
@@ -639,8 +642,8 @@ img {
 }
 
 .loader-ball {
-  width: 200px;
-  height: 200px;
+  width: 150px;
+  height: 150px;
   background-color: aquamarine;
   border-radius: 50px;
 
@@ -695,7 +698,80 @@ img {
 }
 
 .landing-text {
-  margin-top: -20px;
+  margin-top: -60px;
   font-size: 3rem;
+  text-shadow: 2px 2px 5px white;
  
 }
+.render-logo {
+  width: "175px"; 
+  height: "175px";
+}
+
+.welcome-link-row {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  align-items: center;
+  width: 400px
+}
+@media all and (max-width: 400px) {
+  .welcome {
+    font-size: 0.8rem;
+  }
+  .welcome img {
+    width: 100px;
+  }
+  .welcome-link-row {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+  }
+}
+
+
+@media all and (max-width: 350px) {
+  .title-box img {
+    width: 150px;
+  }
+}
+
+.hide-sort-queries {
+  width: 100%;
+  background-color: white;
+  height: 50px;
+  font-size: 2rem;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  position: sticky;
+  top: 0%;
+  background: rgba(255,255,255,0)
+}
+
+.hide-sort-queries[data-showQueries="true"] {
+  top: calc(var(--footer-height) + var(--navbar-height));
+
+
+}
+
+
+.hide-sort-queries__element {
+  width: 25%;
+  border-bottom-left-radius: 15px;
+  border-bottom-right-radius: 15px;
+  border: black solid 1px;
+  margin-top: 0px;
+}
+
+/* .reviews__header {
+  position: sticky;
+  top: calc(var(--footer-height) + var(--navbar-height));
+  background-color: white;
+  box-shadow: 0px 10px 10px 10px white; 
+  margin: 10px;
+} */
+
+
