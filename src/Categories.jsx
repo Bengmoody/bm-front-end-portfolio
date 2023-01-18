@@ -27,7 +27,7 @@ const loaderVariants = {
     animate: {
         scale: [1,1.2,1,1.2],
         backgroundColor: ["#0af", "rgba(50,230,50,1)", "rgba(230,230,255,1)", "#fa0"],
-        borderRadius: ["50px","25px","0px"],
+        borderRadius: ["50%","25%","0%"],
         transition: {
             repeatType: "reverse",
             repeat: Infinity,

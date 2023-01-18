@@ -698,8 +698,9 @@ img {
 }
 
 .landing-text {
-  margin-top: -20px;
+  margin-top: -60px;
   font-size: 3rem;
+  text-shadow: 2px 2px 5px white;
  
 }
 .render-logo {

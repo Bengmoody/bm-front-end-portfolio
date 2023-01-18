@@ -118,16 +118,17 @@ In the following section, any non-functional placeholder elements will be flagge
 
 
 ## Planned updates
+In no particular order:
 
-1. Improve formatting of landing page (/) and footer.
-2. Change the logo from plain-text to a scalable SVG logo, and set limitations on scaling through media queries.
-3. Update landing page to be more attractive, including framer-motion animations upon site load.
-4. Add the ability to vote on comments.
-5. Improve website fonts.
-6. Add the ability to add a review.
-7. Add information on the back-end to "About", such that users can see all available endpoints.  
-8. Fixing back-end error 500.
+-[X] Improve formatting of landing page (/) and footer.
+-[X] Change the logo from plain-text to a scalable SVG logo, and set limitations on scaling through media queries.
+-[X] Update landing page to be more attractive, including framer-motion animations upon site load.
+-[ ] Add the ability to vote on comments.
+-[X] Improve website fonts.
+-[ ] Add the ability to add a review.
+-[ ] Add information on the back-end to "About", such that users can see all available endpoints.  
+-[ ] Fixing back-end error 500.
 
-
+last code update: 18/1/22
 
 
